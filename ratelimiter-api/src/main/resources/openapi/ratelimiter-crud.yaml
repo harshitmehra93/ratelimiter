@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: Rate Limiter API
+  version: 1.0.0
+  description: Contract for creating and managing rate limit rules.
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /ratelimiter:
+    post:
+      tags:
+        - RateLimit
+      operationId: createRateLimiter
+      summary: Create a rate limit rule.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRateLimitRequest'
+      responses:
+        '201':
+          description: Rate limit rule created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRateLimitResponse'
+        '400':
+          description: Invalid request.
+
+  /ratelimiter/{id}:
+    get:
+      tags:
+        - RateLimit
+      operationId: getRateLimiter
+      summary: Get a rate limit rule by id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          example: 123456
+      responses:
+        '200':
+          description: Rate limit rule found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRateLimitResponse'
+        '404':
+          description: Rate limit rule not found.
+
+components:
+  schemas:
+    CreateRateLimitRequest:
+      type: object
+      required:
+        - service
+        - api
+        - method
+        - duration
+        - limit
+      properties:
+        service:
+          type: string
+          minLength: 1
+          example: serviceA
+        api:
+          type: string
+          minLength: 1
+          example: /some/uri
+        method:
+          type: string
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+          example: GET
+        duration:
+          $ref: '#/components/schemas/RateLimitDuration'
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 10
+
+    RateLimitDuration:
+      type: object
+      required:
+        - value
+        - unit
+      properties:
+        value:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 60
+        unit:
+          type: string
+          enum:
+            - SECONDS
+            - MINUTES
+            - HOURS
+            - DAYS
+          example: SECONDS
+
+    CreateRateLimitResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          example: 123456
+
+    GetRateLimitResponse:
+      type: object
+      required:
+        - id
+        - service
+        - api
+        - method
+        - duration
+        - limit
+      properties:
+        id:
+          type: string
+          example: 123456
+        service:
+          type: string
+          minLength: 1
+          example: serviceA
+        api:
+          type: string
+          minLength: 1
+          example: /some/uri
+        method:
+          type: string
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+          example: GET
+        duration:
+          $ref: '#/components/schemas/RateLimitDuration'
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 10

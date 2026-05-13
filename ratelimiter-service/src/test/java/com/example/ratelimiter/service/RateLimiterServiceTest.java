@@ -1,18 +1,16 @@
 package com.example.ratelimiter.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
 public class RateLimiterServiceTest {
 
     @Test
-    void createRateLimiter_happy(){
+    void createRateLimiter_happy() {
         RateLimiterService test = new RateLimiterService();
-        assertEquals("1",test.createRateLimiter("service","api","GET", Duration.ofSeconds(60L),10));
+        assertEquals(
+                "1", test.createRateLimiter("service", "api", "GET", Duration.ofSeconds(60L), 10));
     }
 }

@@ -7,41 +7,45 @@ import com.example.ratelimiter.api.model.GetRateLimitResponse;
 import com.example.ratelimiter.api.model.RateLimitDuration;
 import com.example.ratelimiter.service.RateLimiterService;
 import com.example.ratelimiter.utils.DurationConvertor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RateLimiterController implements RatelimiterApi {
 
-	RateLimiterService rateLimiterService;
+    RateLimiterService rateLimiterService;
 
-	public RateLimiterController(RateLimiterService rateLimiterService) {
-		this.rateLimiterService = rateLimiterService;
-	}
+    public RateLimiterController(RateLimiterService rateLimiterService) {
+        this.rateLimiterService = rateLimiterService;
+    }
 
+    @Override
+    public ResponseEntity<CreateRateLimitResponse> createRateLimiter(
+            CreateRateLimitRequest request) {
+        String id =
+                rateLimiterService.createRateLimiter(
+                        request.getService(),
+                        request.getApi(),
+                        request.getMethod().toString(),
+                        DurationConvertor.convert(request.getDuration()),
+                        request.getLimit());
+        return ResponseEntity.status(201).body(CreateRateLimitResponse.builder().id(id).build());
+    }
 
-	@Override
-	public ResponseEntity<CreateRateLimitResponse> createRateLimiter(CreateRateLimitRequest request) {
-		String id = rateLimiterService.createRateLimiter(request.getService(),request.getApi(),request.getMethod().toString(),DurationConvertor.convert(request.getDuration()),request.getLimit());
-		return ResponseEntity.status(201)
-				.body(CreateRateLimitResponse.builder()
-						.id(id)
-						.build());
-	}
-
-	@Override
-	public ResponseEntity<GetRateLimitResponse> getRateLimiter(String id) {
-		return ResponseEntity.ok(GetRateLimitResponse.builder()
-				.id(id)
-				.service("serviceA")
-				.api("/some/uri")
-				.method(GetRateLimitResponse.MethodEnum.GET)
-				.duration(RateLimitDuration.builder()
-						.value(60)
-						.unit(RateLimitDuration.UnitEnum.SECONDS)
-						.build())
-				.limit(10)
-				.build());
-	}
+    @Override
+    public ResponseEntity<GetRateLimitResponse> getRateLimiter(String id) {
+        return ResponseEntity.ok(
+                GetRateLimitResponse.builder()
+                        .id(id)
+                        .service("serviceA")
+                        .api("/some/uri")
+                        .method(GetRateLimitResponse.MethodEnum.GET)
+                        .duration(
+                                RateLimitDuration.builder()
+                                        .value(60)
+                                        .unit(RateLimitDuration.UnitEnum.SECONDS)
+                                        .build())
+                        .limit(10)
+                        .build());
+    }
 }

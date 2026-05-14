@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,12 +10,9 @@ import static org.mockito.Mockito.when;
 import com.example.ratelimiter.api.model.CreateRateLimitRequest;
 import com.example.ratelimiter.api.model.GetRateLimitResponse;
 import com.example.ratelimiter.api.model.RateLimitDuration;
-import com.example.ratelimiter.controller.RateLimiterController;
 import com.example.ratelimiter.service.RateLimiterService;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 class RatelimiterControllerTest {
 
     private RateLimiterController rateLimiterController;

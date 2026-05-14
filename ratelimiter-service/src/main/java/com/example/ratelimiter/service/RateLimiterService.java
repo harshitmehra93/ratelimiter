@@ -1,5 +1,6 @@
 package com.example.ratelimiter.service;
 
+import com.example.ratelimiter.dal.RateLimit;
 import com.example.ratelimiter.dal.RateLimitRepository;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import java.time.Duration;
@@ -25,5 +26,13 @@ public class RateLimiterService {
                                 .limit(limit)
                                 .build())
                 .getId();
+    }
+
+    public RateLimit getRateLimit(String id) {
+        return rateLimitRepository.getRateLimit(id);
+    }
+
+    public RateLimit getRateLimit(String service, String uri, String method) {
+        return rateLimitRepository.getRateLimit(service, uri, method);
     }
 }

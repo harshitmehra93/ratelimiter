@@ -29,12 +29,53 @@ paths:
                 $ref: '#/components/schemas/CreateRateLimitResponse'
         '400':
           description: Invalid request.
+    get:
+      tags:
+        - RateLimit
+      operationId: getRateLimiter
+      summary: Get a rate limit rule by service, uri, and method.
+      parameters:
+        - name: service
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          example: serviceA
+        - name: uri
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          example: /some/uri
+        - name: method
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+          example: GET
+      responses:
+        '200':
+          description: Rate limit rule found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRateLimitResponse'
+        '404':
+          description: Rate limit rule not found.
 
   /ratelimiter/{id}:
     get:
       tags:
         - RateLimit
-      operationId: getRateLimiter
+      operationId: getRateLimiterById
       summary: Get a rate limit rule by id.
       parameters:
         - name: id
@@ -98,7 +139,7 @@ components:
       properties:
         value:
           type: integer
-          format: int32
+          format: int64
           minimum: 1
           example: 60
         unit:

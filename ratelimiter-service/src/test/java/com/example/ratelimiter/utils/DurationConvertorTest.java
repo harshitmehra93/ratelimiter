@@ -14,20 +14,23 @@ public class DurationConvertorTest {
         RateLimitDuration SixtySec =
                 RateLimitDuration.builder()
                         .unit(RateLimitDuration.UnitEnum.SECONDS)
-                        .value(60)
+                        .value(60L)
                         .build();
         RateLimitDuration SixtyMins =
                 RateLimitDuration.builder()
                         .unit(RateLimitDuration.UnitEnum.MINUTES)
-                        .value(60)
+                        .value(60L)
                         .build();
         RateLimitDuration SixtyHours =
                 RateLimitDuration.builder()
                         .unit(RateLimitDuration.UnitEnum.HOURS)
-                        .value(60)
+                        .value(60L)
                         .build();
         RateLimitDuration SixtyDays =
-                RateLimitDuration.builder().unit(RateLimitDuration.UnitEnum.DAYS).value(60).build();
+                RateLimitDuration.builder()
+                        .unit(RateLimitDuration.UnitEnum.DAYS)
+                        .value(60L)
+                        .build();
 
         assertEquals(60L, durationConvertor.convert(SixtySec).toSeconds());
         assertEquals(60L, durationConvertor.convert(SixtyMins).toMinutes());

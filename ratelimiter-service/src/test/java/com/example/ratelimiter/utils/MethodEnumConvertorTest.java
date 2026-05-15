@@ -3,23 +3,23 @@ package com.example.ratelimiter.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.example.ratelimiter.api.model.GetRateLimitResponse;
+import com.example.ratelimiter.api.model.ApiSignature;
 import org.junit.jupiter.api.Test;
 
 class MethodEnumConvertorTest {
 
     @Test
     void convert_shouldConvertSupportedHttpMethods() {
-        assertEquals(GetRateLimitResponse.MethodEnum.GET, MethodEnumConvertor.convert("GET"));
-        assertEquals(GetRateLimitResponse.MethodEnum.POST, MethodEnumConvertor.convert("POST"));
-        assertEquals(GetRateLimitResponse.MethodEnum.PUT, MethodEnumConvertor.convert("PUT"));
-        assertEquals(GetRateLimitResponse.MethodEnum.PATCH, MethodEnumConvertor.convert("PATCH"));
-        assertEquals(GetRateLimitResponse.MethodEnum.DELETE, MethodEnumConvertor.convert("DELETE"));
+        assertEquals(ApiSignature.MethodEnum.GET, MethodEnumConvertor.convert("GET"));
+        assertEquals(ApiSignature.MethodEnum.POST, MethodEnumConvertor.convert("POST"));
+        assertEquals(ApiSignature.MethodEnum.PUT, MethodEnumConvertor.convert("PUT"));
+        assertEquals(ApiSignature.MethodEnum.PATCH, MethodEnumConvertor.convert("PATCH"));
+        assertEquals(ApiSignature.MethodEnum.DELETE, MethodEnumConvertor.convert("DELETE"));
     }
 
     @Test
     void convert_shouldNormalizeInput() {
-        assertEquals(GetRateLimitResponse.MethodEnum.GET, MethodEnumConvertor.convert(" get "));
+        assertEquals(ApiSignature.MethodEnum.GET, MethodEnumConvertor.convert(" get "));
     }
 
     @Test

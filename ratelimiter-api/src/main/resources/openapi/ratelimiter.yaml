@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: Rate Limiter API
+  version: 1.0.0
+  description: Contract for creating and managing rate limit rules.
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /ratelimiter:
+    $ref: './paths.yaml#/ratelimiter'
+  /ratelimiter/validate:
+    $ref: './paths.yaml#/validateRateLimit'
+  /ratelimiter/{id}:
+    $ref: './paths.yaml#/ratelimiterById'
+
+components:
+  schemas:
+    ApiSignature:
+      $ref: './definitions.yaml#/ApiSignature'
+    CreateRateLimitRequest:
+      $ref: './definitions.yaml#/CreateRateLimitRequest'
+    CreateRateLimitResponse:
+      $ref: './definitions.yaml#/CreateRateLimitResponse'
+    GetRateLimitResponse:
+      $ref: './definitions.yaml#/GetRateLimitResponse'
+    RateLimitDuration:
+      $ref: './definitions.yaml#/RateLimitDuration'
+    RateLimitValidateResponse:
+      $ref: './definitions.yaml#/RateLimitValidateResponse'

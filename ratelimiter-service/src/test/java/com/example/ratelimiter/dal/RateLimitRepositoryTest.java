@@ -2,6 +2,7 @@ package com.example.ratelimiter.dal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import com.example.ratelimiter.model.UpdateRateLimitDetails;
 import java.time.Duration;
@@ -12,7 +13,6 @@ class RateLimitRepositoryTest {
 
     public static final String SERVICE = "service";
     public static final String URI = "/home";
-    public static final String GET = "GET";
     public static final Duration SIXTY_SECONDS = Duration.ofSeconds(60);
     public static final int LIMIT = 100;
 
@@ -28,17 +28,20 @@ class RateLimitRepositoryTest {
         var rateLimit =
                 repository.createRateLimit(
                         CreateRateLimitDetails.builder()
-                                .service(SERVICE)
-                                .uri(URI)
-                                .method(GET)
+                                .apiSignature(
+                                        ApiSignature.builder()
+                                                .service(SERVICE)
+                                                .uri(URI)
+                                                .method(ApiSignature.MethodEnum.GET)
+                                                .build())
                                 .duration(SIXTY_SECONDS)
                                 .limit(LIMIT)
                                 .build());
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
-        assertEquals(SERVICE, rateLimit.getService());
-        assertEquals(URI, rateLimit.getUri());
-        assertEquals(GET, rateLimit.getMethod());
+        assertEquals(SERVICE, rateLimit.getApiSignature().getService());
+        assertEquals(URI, rateLimit.getApiSignature().getUri());
+        assertEquals(ApiSignature.MethodEnum.GET, rateLimit.getApiSignature().getMethod());
         assertEquals(SIXTY_SECONDS, rateLimit.getDuration());
         assertEquals(LIMIT, rateLimit.getLimit());
     }
@@ -48,9 +51,12 @@ class RateLimitRepositoryTest {
         var original =
                 repository.createRateLimit(
                         CreateRateLimitDetails.builder()
-                                .service(SERVICE)
-                                .uri(URI)
-                                .method(GET)
+                                .apiSignature(
+                                        ApiSignature.builder()
+                                                .service(SERVICE)
+                                                .uri(URI)
+                                                .method(ApiSignature.MethodEnum.GET)
+                                                .build())
                                 .duration(SIXTY_SECONDS)
                                 .limit(LIMIT)
                                 .build());
@@ -59,9 +65,9 @@ class RateLimitRepositoryTest {
 
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
-        assertEquals(SERVICE, rateLimit.getService());
-        assertEquals(URI, rateLimit.getUri());
-        assertEquals(GET, rateLimit.getMethod());
+        assertEquals(SERVICE, rateLimit.getApiSignature().getService());
+        assertEquals(URI, rateLimit.getApiSignature().getUri());
+        assertEquals(ApiSignature.MethodEnum.GET, rateLimit.getApiSignature().getMethod());
         assertEquals(SIXTY_SECONDS, rateLimit.getDuration());
         assertEquals(LIMIT, rateLimit.getLimit());
     }
@@ -71,21 +77,22 @@ class RateLimitRepositoryTest {
         var original =
                 repository.createRateLimit(
                         CreateRateLimitDetails.builder()
-                                .service(SERVICE)
-                                .uri(URI)
-                                .method(GET)
+                                .apiSignature(
+                                        ApiSignature.builder()
+                                                .service(SERVICE)
+                                                .uri(URI)
+                                                .method(ApiSignature.MethodEnum.GET)
+                                                .build())
                                 .duration(SIXTY_SECONDS)
                                 .limit(LIMIT)
                                 .build());
 
-        var rateLimit =
-                repository.getRateLimit(
-                        original.getService(), original.getUri(), original.getMethod());
+        var rateLimit = repository.getRateLimit(original.getApiSignature());
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
-        assertEquals(SERVICE, rateLimit.getService());
-        assertEquals(URI, rateLimit.getUri());
-        assertEquals(GET, rateLimit.getMethod());
+        assertEquals(SERVICE, rateLimit.getApiSignature().getService());
+        assertEquals(URI, rateLimit.getApiSignature().getUri());
+        assertEquals(ApiSignature.MethodEnum.GET, rateLimit.getApiSignature().getMethod());
         assertEquals(SIXTY_SECONDS, rateLimit.getDuration());
         assertEquals(LIMIT, rateLimit.getLimit());
     }
@@ -95,9 +102,12 @@ class RateLimitRepositoryTest {
         var original =
                 repository.createRateLimit(
                         CreateRateLimitDetails.builder()
-                                .service(SERVICE)
-                                .uri(URI)
-                                .method(GET)
+                                .apiSignature(
+                                        ApiSignature.builder()
+                                                .service(SERVICE)
+                                                .uri(URI)
+                                                .method(ApiSignature.MethodEnum.GET)
+                                                .build())
                                 .duration(SIXTY_SECONDS)
                                 .limit(LIMIT)
                                 .build());
@@ -111,9 +121,9 @@ class RateLimitRepositoryTest {
 
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
-        assertEquals(SERVICE, rateLimit.getService());
-        assertEquals(URI, rateLimit.getUri());
-        assertEquals(GET, rateLimit.getMethod());
+        assertEquals(SERVICE, rateLimit.getApiSignature().getService());
+        assertEquals(URI, rateLimit.getApiSignature().getUri());
+        assertEquals(ApiSignature.MethodEnum.GET, rateLimit.getApiSignature().getMethod());
         assertEquals(Duration.ofSeconds(120), rateLimit.getDuration());
         assertEquals(200, rateLimit.getLimit());
     }

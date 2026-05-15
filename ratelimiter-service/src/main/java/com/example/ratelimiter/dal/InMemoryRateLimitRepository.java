@@ -1,5 +1,6 @@
 package com.example.ratelimiter.dal;
 
+import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import com.example.ratelimiter.model.UpdateRateLimitDetails;
 import java.util.Map;
@@ -14,9 +15,7 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     public RateLimit createRateLimit(CreateRateLimitDetails createRateLimitDetails) {
         RateLimit rateLimit = new RateLimit();
         rateLimit.setId(UUID.randomUUID().toString());
-        rateLimit.setService(createRateLimitDetails.getService());
-        rateLimit.setUri(createRateLimitDetails.getUri());
-        rateLimit.setMethod(createRateLimitDetails.getMethod());
+        rateLimit.setApiSignature(createRateLimitDetails.getApiSignature());
         rateLimit.setDuration(createRateLimitDetails.getDuration());
         rateLimit.setLimit(createRateLimitDetails.getLimit());
         rateLimits.put(rateLimit.getId(), rateLimit);
@@ -29,13 +28,9 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
     }
 
     @Override
-    public RateLimit getRateLimit(String service, String uri, String method) {
+    public RateLimit getRateLimit(ApiSignature apiSignature) {
         return rateLimits.values().stream()
-                .filter(
-                        rateLimit ->
-                                rateLimit.getService().equals(service)
-                                        && rateLimit.getUri().equals(uri)
-                                        && rateLimit.getMethod().equals(method))
+                .filter(rateLimit -> rateLimit.getApiSignature().equals(apiSignature))
                 .findFirst()
                 .orElse(null);
     }
@@ -46,11 +41,7 @@ public class InMemoryRateLimitRepository implements RateLimitRepository {
         if (updateRateLimitDetails.getId() != null) {
             rateLimit = getRateLimit(updateRateLimitDetails.getId());
         } else {
-            rateLimit =
-                    getRateLimit(
-                            updateRateLimitDetails.getService(),
-                            updateRateLimitDetails.getUri(),
-                            updateRateLimitDetails.getMethod());
+            rateLimit = getRateLimit(updateRateLimitDetails.getApiSignature());
         }
 
         if (rateLimit == null) {

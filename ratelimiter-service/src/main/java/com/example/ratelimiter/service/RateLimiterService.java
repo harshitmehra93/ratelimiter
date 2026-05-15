@@ -1,5 +1,6 @@
 package com.example.ratelimiter.service;
 
+import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.dal.RateLimit;
 import com.example.ratelimiter.dal.RateLimitRepository;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
@@ -14,14 +15,11 @@ public class RateLimiterService {
         this.rateLimitRepository = rateLimitRepository;
     }
 
-    public String createRateLimiter(
-            String service, String uri, String method, Duration duration, int limit) {
+    public String createRateLimiter(ApiSignature apiSignature, Duration duration, int limit) {
         return rateLimitRepository
                 .createRateLimit(
                         CreateRateLimitDetails.builder()
-                                .service(service)
-                                .uri(uri)
-                                .method(method)
+                                .apiSignature(apiSignature)
                                 .duration(duration)
                                 .limit(limit)
                                 .build())
@@ -32,7 +30,7 @@ public class RateLimiterService {
         return rateLimitRepository.getRateLimit(id);
     }
 
-    public RateLimit getRateLimit(String service, String uri, String method) {
-        return rateLimitRepository.getRateLimit(service, uri, method);
+    public RateLimit getRateLimit(ApiSignature apiSignature) {
+        return rateLimitRepository.getRateLimit(apiSignature);
     }
 }

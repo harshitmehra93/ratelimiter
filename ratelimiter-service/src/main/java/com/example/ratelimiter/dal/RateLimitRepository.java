@@ -1,5 +1,6 @@
 package com.example.ratelimiter.dal;
 
+import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import com.example.ratelimiter.model.UpdateRateLimitDetails;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ public interface RateLimitRepository {
 
     RateLimit getRateLimit(String id);
 
-    RateLimit getRateLimit(String service, String uri, String method);
+    RateLimit getRateLimit(ApiSignature apiSignature);
 
     RateLimit updateRateLimit(UpdateRateLimitDetails updateRateLimitDetails);
 

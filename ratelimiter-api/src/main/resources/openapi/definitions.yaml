@@ -1,0 +1,105 @@
+ApiSignature:
+  type: object
+  required:
+    - service
+    - uri
+    - method
+  properties:
+    service:
+      type: string
+      minLength: 1
+      example: serviceA
+    uri:
+      type: string
+      minLength: 1
+      example: /some/uri
+    method:
+      type: string
+      enum:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      example: GET
+
+CreateRateLimitRequest:
+  type: object
+  required:
+    - apiSignature
+    - duration
+    - limit
+  properties:
+    apiSignature:
+      $ref: '#/ApiSignature'
+    duration:
+      $ref: '#/RateLimitDuration'
+    limit:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 10
+
+CreateRateLimitResponse:
+  type: object
+  required:
+    - id
+  properties:
+    id:
+      type: string
+      example: 123456
+
+GetRateLimitResponse:
+  type: object
+  required:
+    - id
+    - apiSignature
+    - duration
+    - limit
+  properties:
+    id:
+      type: string
+      example: 123456
+    apiSignature:
+      $ref: '#/ApiSignature'
+    duration:
+      $ref: '#/RateLimitDuration'
+    limit:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 10
+
+RateLimitDuration:
+  type: object
+  required:
+    - value
+    - unit
+  properties:
+    value:
+      type: integer
+      format: int64
+      minimum: 1
+      example: 60
+    unit:
+      type: string
+      enum:
+        - SECONDS
+        - MINUTES
+        - HOURS
+        - DAYS
+      example: SECONDS
+
+RateLimitValidateResponse:
+  type: object
+  required:
+    - isAllowed
+    - apiSignature
+  properties:
+    isAllowed:
+      type: boolean
+      example: true
+    apiSignature:
+      $ref: '#/ApiSignature'
+    message:
+      type: string

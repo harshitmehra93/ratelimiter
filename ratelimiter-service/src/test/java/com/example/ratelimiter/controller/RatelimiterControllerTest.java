@@ -8,28 +8,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.example.ratelimiter.api.model.ApiSignature;
-import com.example.ratelimiter.api.model.CreateRateLimitRequest;
-import com.example.ratelimiter.api.model.GetRateLimitResponse;
-import com.example.ratelimiter.api.model.RateLimitDuration;
-import com.example.ratelimiter.dal.RateLimit;
-import com.example.ratelimiter.service.RateLimiterService;
+import com.example.ratelimiter.api.model.CreateRateLimitRuleRequest;
+import com.example.ratelimiter.api.model.GetRateLimitRuleResponse;
+import com.example.ratelimiter.api.model.RateLimitRuleDuration;
+import com.example.ratelimiter.dal.RateLimitRule;
+import com.example.ratelimiter.service.RateLimitRuleService;
 import org.junit.jupiter.api.*;
+
+import java.util.Optional;
 
 class RatelimiterControllerTest {
 
     private RateLimiterController rateLimiterController;
-    private RateLimiterService rateLimiterService;
+    private RateLimitRuleService rateLimitRuleService;
 
     @BeforeEach
     void setup() {
-        rateLimiterService = mock(RateLimiterService.class);
-        rateLimiterController = new RateLimiterController(rateLimiterService);
+        rateLimitRuleService = mock(RateLimitRuleService.class);
+        rateLimiterController = new RateLimiterController(rateLimitRuleService);
     }
 
     @Test
     void createRateLimiter_happy() {
-        CreateRateLimitRequest request =
-                CreateRateLimitRequest.builder()
+        CreateRateLimitRuleRequest request =
+                CreateRateLimitRuleRequest.builder()
                         .apiSignature(
                                 ApiSignature.builder()
                                         .service("serviceA")
@@ -37,17 +39,17 @@ class RatelimiterControllerTest {
                                         .method(ApiSignature.MethodEnum.GET)
                                         .build())
                         .duration(
-                                RateLimitDuration.builder()
-                                        .unit(RateLimitDuration.UnitEnum.SECONDS)
+                                RateLimitRuleDuration.builder()
+                                        .unit(RateLimitRuleDuration.UnitEnum.SECONDS)
                                         .value(60L)
                                         .build())
                         .limit(10)
                         .build();
         String rateLimiterId = "123456";
-        when(rateLimiterService.createRateLimiter(any(), any(), anyInt()))
+        when(rateLimitRuleService.createRateLimitRule(any(), any(), anyInt()))
                 .thenReturn(rateLimiterId);
 
-        var createResponse = rateLimiterController.createRateLimiter(request);
+        var createResponse = rateLimiterController.createRateLimitRule(request);
         assertNotNull(createResponse);
         assertEquals(rateLimiterId, createResponse.getBody().getId());
     }
@@ -55,22 +57,22 @@ class RatelimiterControllerTest {
     @Test
     void getRateLimiter_happy() {
         String rateLimiterId = "123456";
-        RateLimit rateLimit = new RateLimit();
-        rateLimit.setId(rateLimiterId);
+        RateLimitRule rateLimitRule = new RateLimitRule();
+        rateLimitRule.setId(rateLimiterId);
         String serviceA = "serviceA";
         String uri = "/some/uri";
-        rateLimit.setApiSignature(
+        rateLimitRule.setApiSignature(
                 ApiSignature.builder()
                         .service(serviceA)
                         .uri(uri)
                         .method(ApiSignature.MethodEnum.GET)
                         .build());
-        rateLimit.setDuration(java.time.Duration.ofSeconds(60L));
-        rateLimit.setLimit(10);
-        when(rateLimiterService.getRateLimit(rateLimiterId)).thenReturn(rateLimit);
+        rateLimitRule.setDuration(java.time.Duration.ofSeconds(60L));
+        rateLimitRule.setLimit(10);
+        when(rateLimitRuleService.getRateLimitRule(rateLimiterId)).thenReturn(Optional.of(rateLimitRule));
 
-        GetRateLimitResponse response =
-                rateLimiterController.getRateLimiterById(rateLimiterId).getBody();
+        GetRateLimitRuleResponse response =
+                rateLimiterController.getRateLimitRuleById(rateLimiterId).getBody();
 
         assertNotNull(response);
         assertEquals(rateLimiterId, response.getId());
@@ -81,7 +83,7 @@ class RatelimiterControllerTest {
         var duration = response.getDuration();
         assertNotNull(duration);
         assertEquals(60, duration.getValue());
-        assertEquals(RateLimitDuration.UnitEnum.SECONDS, duration.getUnit());
+        assertEquals(RateLimitRuleDuration.UnitEnum.SECONDS, duration.getUnit());
     }
 
     @Test
@@ -89,28 +91,28 @@ class RatelimiterControllerTest {
         String service = "serviceA";
         String uri = "/some/uri";
         String method = "GET";
-        RateLimit rateLimit = new RateLimit();
-        rateLimit.setId("123456");
+        RateLimitRule rateLimitRule = new RateLimitRule();
+        rateLimitRule.setId("123456");
         ApiSignature apiSignature =
                 ApiSignature.builder()
                         .service(service)
                         .uri(uri)
                         .method(ApiSignature.MethodEnum.GET)
                         .build();
-        rateLimit.setApiSignature(apiSignature);
-        rateLimit.setDuration(java.time.Duration.ofSeconds(60L));
-        rateLimit.setLimit(10);
-        when(rateLimiterService.getRateLimit(apiSignature)).thenReturn(rateLimit);
+        rateLimitRule.setApiSignature(apiSignature);
+        rateLimitRule.setDuration(java.time.Duration.ofSeconds(60L));
+        rateLimitRule.setLimit(10);
+        when(rateLimitRuleService.getRateLimitRule(apiSignature)).thenReturn(Optional.of(rateLimitRule));
 
-        GetRateLimitResponse response =
-                rateLimiterController.getRateLimiter(service, uri, method).getBody();
+        GetRateLimitRuleResponse response =
+                rateLimiterController.getRateLimitRule(service, uri, method).getBody();
 
         assertNotNull(response);
         assertEquals("123456", response.getId());
         assertEquals(service, response.getApiSignature().getService());
         assertEquals(uri, response.getApiSignature().getUri());
         assertEquals(10, response.getLimit());
-        assertEquals(RateLimitDuration.UnitEnum.SECONDS, response.getDuration().getUnit());
+        assertEquals(RateLimitRuleDuration.UnitEnum.SECONDS, response.getDuration().getUnit());
         assertEquals(60L, response.getDuration().getValue());
     }
 }

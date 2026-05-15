@@ -1,7 +1,7 @@
 package com.example.ratelimiter.config;
 
-import com.example.ratelimiter.dal.InMemoryRateLimitRepository;
-import com.example.ratelimiter.dal.RateLimitRepository;
+import com.example.ratelimiter.dal.InMemoryRateLimitRuleRepository;
+import com.example.ratelimiter.dal.RateLimitRuleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class RepositoryConfig {
 
     @Bean
-    public RateLimitRepository rateLimitRepository() {
-        return new InMemoryRateLimitRepository();
+    public RateLimitRuleRepository rateLimitRepository() {
+        return new InMemoryRateLimitRuleRepository();
     }
 }

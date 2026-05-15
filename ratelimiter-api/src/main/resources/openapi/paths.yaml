@@ -1,28 +1,28 @@
-ratelimiter:
+rateLimitRule:
   post:
     tags:
       - RateLimit
-    operationId: createRateLimiter
+    operationId: createRateLimitRule
     summary: Create a rate limit rule.
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: './ratelimiter.yaml#/components/schemas/CreateRateLimitRequest'
+            $ref: './ratelimiter.yaml#/components/schemas/CreateRateLimitRuleRequest'
     responses:
       '201':
         description: Rate limit rule created.
         content:
           application/json:
             schema:
-              $ref: './ratelimiter.yaml#/components/schemas/CreateRateLimitResponse'
+              $ref: './ratelimiter.yaml#/components/schemas/CreateRateLimitRuleResponse'
       '400':
         description: Invalid request.
   get:
     tags:
       - RateLimit
-    operationId: getRateLimiter
+    operationId: getRateLimitRule
     summary: Get a rate limit rule by service, uri, and method.
     parameters:
       - name: service
@@ -57,7 +57,7 @@ ratelimiter:
         content:
           application/json:
             schema:
-              $ref: './ratelimiter.yaml#/components/schemas/GetRateLimitResponse'
+              $ref: './ratelimiter.yaml#/components/schemas/GetRateLimitRuleResponse'
       '404':
         description: Rate limit rule not found.
 
@@ -102,11 +102,11 @@ validateRateLimit:
       '404':
         description: Rate limit rule not found.
 
-ratelimiterById:
+rateLimitRuleById:
   get:
     tags:
       - RateLimit
-    operationId: getRateLimiterById
+    operationId: getRateLimitRuleById
     summary: Get a rate limit rule by id.
     parameters:
       - name: id
@@ -122,6 +122,6 @@ ratelimiterById:
         content:
           application/json:
             schema:
-              $ref: './ratelimiter.yaml#/components/schemas/GetRateLimitResponse'
+              $ref: './ratelimiter.yaml#/components/schemas/GetRateLimitRuleResponse'
       '404':
         description: Rate limit rule not found.

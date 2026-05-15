@@ -9,18 +9,18 @@ import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RateLimitRepositoryTest {
+class RateLimitRuleRepositoryTest {
 
     public static final String SERVICE = "service";
     public static final String URI = "/home";
     public static final Duration SIXTY_SECONDS = Duration.ofSeconds(60);
     public static final int LIMIT = 100;
 
-    private RateLimitRepository repository;
+    private RateLimitRuleRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new InMemoryRateLimitRepository();
+        repository = new InMemoryRateLimitRuleRepository();
     }
 
     @Test
@@ -61,7 +61,7 @@ class RateLimitRepositoryTest {
                                 .limit(LIMIT)
                                 .build());
 
-        var rateLimit = repository.getRateLimit(original.getId());
+        var rateLimit = repository.getRateLimit(original.getId()).get();
 
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
@@ -87,7 +87,7 @@ class RateLimitRepositoryTest {
                                 .limit(LIMIT)
                                 .build());
 
-        var rateLimit = repository.getRateLimit(original.getApiSignature());
+        var rateLimit = repository.getRateLimit(original.getApiSignature()).get();
         assertNotNull(rateLimit);
         assertNotNull(rateLimit.getId());
         assertEquals(SERVICE, rateLimit.getApiSignature().getService());
@@ -126,5 +126,20 @@ class RateLimitRepositoryTest {
         assertEquals(ApiSignature.MethodEnum.GET, rateLimit.getApiSignature().getMethod());
         assertEquals(Duration.ofSeconds(120), rateLimit.getDuration());
         assertEquals(200, rateLimit.getLimit());
+    }
+
+    @Test
+    void getRateLimitByID_doesNotExist_throws(){
+        assertTrue(repository.getRateLimit("ID").isEmpty());
+    }
+
+    @Test
+    void getRateLimitBySignature_doesNotExist_throws(){
+        ApiSignature apiSignature = ApiSignature.builder()
+                .service(SERVICE)
+                .uri(URI)
+                .method(ApiSignature.MethodEnum.GET)
+                .build();
+        assertTrue(repository.getRateLimit(apiSignature).isEmpty());
     }
 }

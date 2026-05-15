@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
-public class RateLimit {
+public class RateLimitRule {
     private String id;
     private ApiSignature apiSignature;
     private Duration duration;

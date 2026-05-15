@@ -1,11 +1,12 @@
 package com.example.ratelimiter.utils;
 
-import com.example.ratelimiter.api.model.RateLimitDuration;
+import com.example.ratelimiter.api.model.RateLimitRuleDuration;
+
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 public class DurationConvertor {
-    public static Duration convert(RateLimitDuration duration) {
+    public static Duration convert(RateLimitRuleDuration duration) {
         ChronoUnit unit =
                 switch (duration.getUnit()) {
                     case SECONDS -> ChronoUnit.SECONDS;

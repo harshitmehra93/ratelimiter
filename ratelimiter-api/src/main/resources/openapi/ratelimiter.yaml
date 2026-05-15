@@ -9,23 +9,23 @@ servers:
 
 paths:
   /ratelimiter:
-    $ref: './paths.yaml#/ratelimiter'
+    $ref: './paths.yaml#/rateLimitRule'
   /ratelimiter/validate:
     $ref: './paths.yaml#/validateRateLimit'
   /ratelimiter/{id}:
-    $ref: './paths.yaml#/ratelimiterById'
+    $ref: './paths.yaml#/rateLimitRuleById'
 
 components:
   schemas:
     ApiSignature:
       $ref: './definitions.yaml#/ApiSignature'
-    CreateRateLimitRequest:
-      $ref: './definitions.yaml#/CreateRateLimitRequest'
-    CreateRateLimitResponse:
-      $ref: './definitions.yaml#/CreateRateLimitResponse'
-    GetRateLimitResponse:
-      $ref: './definitions.yaml#/GetRateLimitResponse'
-    RateLimitDuration:
-      $ref: './definitions.yaml#/RateLimitDuration'
+    CreateRateLimitRuleRequest:
+      $ref: './definitions.yaml#/CreateRateLimitRuleRequest'
+    CreateRateLimitRuleResponse:
+      $ref: './definitions.yaml#/CreateRateLimitRuleResponse'
+    GetRateLimitRuleResponse:
+      $ref: './definitions.yaml#/GetRateLimitRuleResponse'
+    RateLimitRuleDuration:
+      $ref: './definitions.yaml#/RateLimitRuleDuration'
     RateLimitValidateResponse:
       $ref: './definitions.yaml#/RateLimitValidateResponse'

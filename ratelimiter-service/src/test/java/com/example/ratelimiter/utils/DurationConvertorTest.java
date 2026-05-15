@@ -2,7 +2,7 @@ package com.example.ratelimiter.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.example.ratelimiter.api.model.RateLimitDuration;
+import com.example.ratelimiter.api.model.RateLimitRuleDuration;
 import org.junit.jupiter.api.Test;
 
 public class DurationConvertorTest {
@@ -11,24 +11,24 @@ public class DurationConvertorTest {
     void test() {
         DurationConvertor durationConvertor = new DurationConvertor();
 
-        RateLimitDuration SixtySec =
-                RateLimitDuration.builder()
-                        .unit(RateLimitDuration.UnitEnum.SECONDS)
+        RateLimitRuleDuration SixtySec =
+                RateLimitRuleDuration.builder()
+                        .unit(RateLimitRuleDuration.UnitEnum.SECONDS)
                         .value(60L)
                         .build();
-        RateLimitDuration SixtyMins =
-                RateLimitDuration.builder()
-                        .unit(RateLimitDuration.UnitEnum.MINUTES)
+        RateLimitRuleDuration SixtyMins =
+                RateLimitRuleDuration.builder()
+                        .unit(RateLimitRuleDuration.UnitEnum.MINUTES)
                         .value(60L)
                         .build();
-        RateLimitDuration SixtyHours =
-                RateLimitDuration.builder()
-                        .unit(RateLimitDuration.UnitEnum.HOURS)
+        RateLimitRuleDuration SixtyHours =
+                RateLimitRuleDuration.builder()
+                        .unit(RateLimitRuleDuration.UnitEnum.HOURS)
                         .value(60L)
                         .build();
-        RateLimitDuration SixtyDays =
-                RateLimitDuration.builder()
-                        .unit(RateLimitDuration.UnitEnum.DAYS)
+        RateLimitRuleDuration SixtyDays =
+                RateLimitRuleDuration.builder()
+                        .unit(RateLimitRuleDuration.UnitEnum.DAYS)
                         .value(60L)
                         .build();
 

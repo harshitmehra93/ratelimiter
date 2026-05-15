@@ -23,7 +23,7 @@ ApiSignature:
         - DELETE
       example: GET
 
-CreateRateLimitRequest:
+CreateRateLimitRuleRequest:
   type: object
   required:
     - apiSignature
@@ -33,14 +33,14 @@ CreateRateLimitRequest:
     apiSignature:
       $ref: '#/ApiSignature'
     duration:
-      $ref: '#/RateLimitDuration'
+      $ref: '#/RateLimitRuleDuration'
     limit:
       type: integer
       format: int32
       minimum: 1
       example: 10
 
-CreateRateLimitResponse:
+CreateRateLimitRuleResponse:
   type: object
   required:
     - id
@@ -49,7 +49,7 @@ CreateRateLimitResponse:
       type: string
       example: 123456
 
-GetRateLimitResponse:
+GetRateLimitRuleResponse:
   type: object
   required:
     - id
@@ -63,14 +63,14 @@ GetRateLimitResponse:
     apiSignature:
       $ref: '#/ApiSignature'
     duration:
-      $ref: '#/RateLimitDuration'
+      $ref: '#/RateLimitRuleDuration'
     limit:
       type: integer
       format: int32
       minimum: 1
       example: 10
 
-RateLimitDuration:
+RateLimitRuleDuration:
   type: object
   required:
     - value

@@ -2,39 +2,41 @@ package com.example.ratelimiter.controller;
 
 import com.example.ratelimiter.api.RatelimiterApi;
 import com.example.ratelimiter.api.model.*;
-import com.example.ratelimiter.dal.RateLimit;
+import com.example.ratelimiter.dal.RateLimitRule;
 import com.example.ratelimiter.service.RateLimitValidator;
-import com.example.ratelimiter.service.RateLimiterService;
+import com.example.ratelimiter.service.RateLimitRuleService;
 import com.example.ratelimiter.utils.DurationConvertor;
 import com.example.ratelimiter.utils.MethodEnumConvertor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 public class RateLimiterController implements RatelimiterApi {
 
-    RateLimiterService rateLimiterService;
+    RateLimitRuleService rateLimitRuleService;
     RateLimitValidator rateLimitValidator;
 
-    public RateLimiterController(RateLimiterService rateLimiterService) {
-        this.rateLimiterService = rateLimiterService;
+    public RateLimiterController(RateLimitRuleService rateLimitRuleService) {
+        this.rateLimitRuleService = rateLimitRuleService;
     }
 
     @Override
-    public ResponseEntity<CreateRateLimitResponse> createRateLimiter(
-            CreateRateLimitRequest request) {
+    public ResponseEntity<CreateRateLimitRuleResponse> createRateLimitRule(
+            CreateRateLimitRuleRequest request) {
         String id =
-                rateLimiterService.createRateLimiter(
+                rateLimitRuleService.createRateLimitRule(
                         request.getApiSignature(),
                         DurationConvertor.convert(request.getDuration()),
                         request.getLimit());
-        return ResponseEntity.status(201).body(CreateRateLimitResponse.builder().id(id).build());
+        return ResponseEntity.status(201).body(CreateRateLimitRuleResponse.builder().id(id).build());
     }
 
-    @Override
-    public ResponseEntity<GetRateLimitResponse> getRateLimiterById(String id) {
-        RateLimit rateLimit = rateLimiterService.getRateLimit(id);
-        return getRateLimitResponseEntity(rateLimit);
+    public ResponseEntity<GetRateLimitRuleResponse> getRateLimitRuleById(String id) {
+        Optional<RateLimitRule> rateLimit = rateLimitRuleService.getRateLimitRule(id);
+        if(rateLimit.isEmpty()) return ResponseEntity.notFound().build();
+        return getRateLimitResponseEntity(rateLimit.get());
     }
 
     @Override
@@ -50,7 +52,7 @@ public class RateLimiterController implements RatelimiterApi {
     }
 
     @Override
-    public ResponseEntity<GetRateLimitResponse> getRateLimiter(
+    public ResponseEntity<GetRateLimitRuleResponse> getRateLimitRule(
             String service, String uri, String method) {
         ApiSignature apiSignature =
                 ApiSignature.builder()
@@ -58,22 +60,23 @@ public class RateLimiterController implements RatelimiterApi {
                         .uri(uri)
                         .method(MethodEnumConvertor.convert(method))
                         .build();
-        RateLimit rateLimit = rateLimiterService.getRateLimit(apiSignature);
-        return getRateLimitResponseEntity(rateLimit);
+        Optional<RateLimitRule> rateLimit = rateLimitRuleService.getRateLimitRule(apiSignature);
+        if(rateLimit.isEmpty()) return ResponseEntity.notFound().build();
+        return getRateLimitResponseEntity(rateLimit.get());
     }
 
-    private static ResponseEntity<GetRateLimitResponse> getRateLimitResponseEntity(
-            RateLimit rateLimit) {
+    private static ResponseEntity<GetRateLimitRuleResponse> getRateLimitResponseEntity(
+            RateLimitRule rateLimitRule) {
         return ResponseEntity.ok(
-                GetRateLimitResponse.builder()
-                        .id(rateLimit.getId())
-                        .apiSignature(rateLimit.getApiSignature())
+                GetRateLimitRuleResponse.builder()
+                        .id(rateLimitRule.getId())
+                        .apiSignature(rateLimitRule.getApiSignature())
                         .duration(
-                                RateLimitDuration.builder()
-                                        .value(rateLimit.getDuration().getSeconds())
-                                        .unit(RateLimitDuration.UnitEnum.SECONDS)
+                                RateLimitRuleDuration.builder()
+                                        .value(rateLimitRule.getDuration().getSeconds())
+                                        .unit(RateLimitRuleDuration.UnitEnum.SECONDS)
                                         .build())
-                        .limit(rateLimit.getLimit())
+                        .limit(rateLimitRule.getLimit())
                         .build());
     }
 }

@@ -36,12 +36,14 @@ public class RateLimiterController implements RatelimiterApi {
     }
 
     @Override
-    public ResponseEntity<RateLimitValidateResponse> validateRateLimit(String service, String uri, String method) {
-        ApiSignature apiSignature = ApiSignature.builder()
-                .service(service)
-                .uri(uri)
-                .method(MethodEnumConvertor.convert(method))
-                .build();
+    public ResponseEntity<RateLimitValidateResponse> validateRateLimit(
+            String service, String uri, String method) {
+        ApiSignature apiSignature =
+                ApiSignature.builder()
+                        .service(service)
+                        .uri(uri)
+                        .method(MethodEnumConvertor.convert(method))
+                        .build();
         RateLimit rateLimit = rateLimiterService.getRateLimit(apiSignature);
 
         return null;

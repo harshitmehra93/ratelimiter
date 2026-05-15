@@ -56,7 +56,7 @@ class RatelimiterControllerTest {
     @Test
     void getRateLimiter_happy() {
         String rateLimiterId = "123456";
-        RateLimitRule rateLimitRule = new RateLimitRule();
+        RateLimitRule rateLimitRule = RateLimitRule.builder().build();
         rateLimitRule.setId(rateLimiterId);
         String serviceA = "serviceA";
         String uri = "/some/uri";
@@ -91,7 +91,7 @@ class RatelimiterControllerTest {
         String service = "serviceA";
         String uri = "/some/uri";
         String method = "GET";
-        RateLimitRule rateLimitRule = new RateLimitRule();
+        RateLimitRule rateLimitRule = RateLimitRule.builder().build();
         rateLimitRule.setId("123456");
         ApiSignature apiSignature =
                 ApiSignature.builder()

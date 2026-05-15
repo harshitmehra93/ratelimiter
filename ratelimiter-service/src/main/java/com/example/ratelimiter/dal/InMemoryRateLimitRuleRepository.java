@@ -17,11 +17,12 @@ public class InMemoryRateLimitRuleRepository implements RateLimitRuleRepository 
     public RateLimitRule createRateLimit(CreateRateLimitDetails createRateLimitDetails) {
         if (getRateLimit(createRateLimitDetails.getApiSignature()).isPresent())
             throw new RateLimitException("Rate Limit already exists");
-        RateLimitRule rateLimitRule = new RateLimitRule();
+        RateLimitRule rateLimitRule = RateLimitRule.builder().build();
         rateLimitRule.setId(UUID.randomUUID().toString());
         rateLimitRule.setApiSignature(createRateLimitDetails.getApiSignature());
         rateLimitRule.setDuration(createRateLimitDetails.getDuration());
         rateLimitRule.setLimit(createRateLimitDetails.getLimit());
+        rateLimitRule.setCounter(createRateLimitDetails.getCounter());
         rateLimitRules.put(rateLimitRule.getId(), rateLimitRule);
         return rateLimitRule;
     }

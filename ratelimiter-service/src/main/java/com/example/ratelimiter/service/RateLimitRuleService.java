@@ -17,14 +17,17 @@ public class RateLimitRuleService {
     }
 
     public String createRateLimitRule(ApiSignature apiSignature, Duration duration, int limit) {
-        return rateLimitRuleRepository
-                .createRateLimit(
+        CounterImpl counter = new CounterImpl();
+        RateLimitRule rateLimit =
+                rateLimitRuleRepository.createRateLimit(
                         CreateRateLimitDetails.builder()
                                 .apiSignature(apiSignature)
                                 .duration(duration)
                                 .limit(limit)
-                                .build())
-                .getId();
+                                .counter(counter)
+                                .build());
+        counter.setRateLimitRule(rateLimit);
+        return rateLimit.getId();
     }
 
     public Optional<RateLimitRule> getRateLimitRule(String id) {

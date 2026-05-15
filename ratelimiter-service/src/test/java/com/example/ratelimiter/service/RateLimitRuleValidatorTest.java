@@ -49,12 +49,4 @@ public class RateLimitRuleValidatorTest {
         assertThrows(
                 RateLimitException.class, () -> rateLimitValidator.validateRateLimit(apiSignature));
     }
-
-    @Test
-    void addCount() {}
-
-    @Test
-    void getCountInWindow_happy() {
-        fail();
-    }
 }

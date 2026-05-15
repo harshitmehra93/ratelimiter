@@ -6,6 +6,9 @@ import com.example.ratelimiter.api.model.RateLimitValidateResponse;
 public class RateLimitValidatorImpl implements RateLimitValidator {
     @Override
     public RateLimitValidateResponse validateRateLimit(ApiSignature apiSignature) {
-        return null;
+        return RateLimitValidateResponse.builder()
+                .apiSignature(apiSignature)
+                .isAllowed(true)
+                .build();
     }
 }

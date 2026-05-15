@@ -3,6 +3,7 @@ package com.example.ratelimiter.controller;
 import com.example.ratelimiter.api.RatelimiterApi;
 import com.example.ratelimiter.api.model.*;
 import com.example.ratelimiter.dal.RateLimit;
+import com.example.ratelimiter.service.RateLimitValidator;
 import com.example.ratelimiter.service.RateLimiterService;
 import com.example.ratelimiter.utils.DurationConvertor;
 import com.example.ratelimiter.utils.MethodEnumConvertor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RateLimiterController implements RatelimiterApi {
 
     RateLimiterService rateLimiterService;
+    RateLimitValidator rateLimitValidator;
 
     public RateLimiterController(RateLimiterService rateLimiterService) {
         this.rateLimiterService = rateLimiterService;
@@ -44,9 +46,7 @@ public class RateLimiterController implements RatelimiterApi {
                         .uri(uri)
                         .method(MethodEnumConvertor.convert(method))
                         .build();
-        RateLimit rateLimit = rateLimiterService.getRateLimit(apiSignature);
-
-        return null;
+        return ResponseEntity.ok(rateLimitValidator.validateRateLimit(apiSignature));
     }
 
     @Override

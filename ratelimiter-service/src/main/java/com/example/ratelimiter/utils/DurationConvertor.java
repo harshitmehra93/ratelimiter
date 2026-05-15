@@ -1,7 +1,6 @@
 package com.example.ratelimiter.utils;
 
 import com.example.ratelimiter.api.model.RateLimitRuleDuration;
-
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 

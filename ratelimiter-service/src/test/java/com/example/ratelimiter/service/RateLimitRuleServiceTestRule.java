@@ -1,12 +1,12 @@
 package com.example.ratelimiter.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.dal.InMemoryRateLimitRuleRepository;
 import com.example.ratelimiter.dal.RateLimitRule;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RateLimitRuleServiceTestRule {
     public static final String SERVICE = "service";
@@ -68,7 +68,7 @@ public class RateLimitRuleServiceTestRule {
     }
 
     @Test
-    void getRateLimit_DoesNotExist_Throws(){
+    void getRateLimit_DoesNotExist_Throws() {
         ApiSignature apiSignature =
                 ApiSignature.builder()
                         .service(SERVICE)
@@ -79,7 +79,7 @@ public class RateLimitRuleServiceTestRule {
     }
 
     @Test
-    void getRateLimitById_DoesNotExist_Throws(){
+    void getRateLimitById_DoesNotExist_Throws() {
         assertTrue(rateLimitRuleService.getRateLimitRule("ID").isEmpty());
     }
 }

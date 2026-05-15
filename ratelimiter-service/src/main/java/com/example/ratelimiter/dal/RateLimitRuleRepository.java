@@ -3,9 +3,8 @@ package com.example.ratelimiter.dal;
 import com.example.ratelimiter.api.model.ApiSignature;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import com.example.ratelimiter.model.UpdateRateLimitDetails;
-import org.springframework.stereotype.Component;
-
 import java.util.Optional;
+import org.springframework.stereotype.Component;
 
 @Component
 public interface RateLimitRuleRepository {

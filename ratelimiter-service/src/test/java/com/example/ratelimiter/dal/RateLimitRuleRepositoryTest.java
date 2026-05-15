@@ -129,17 +129,18 @@ class RateLimitRuleRepositoryTest {
     }
 
     @Test
-    void getRateLimitByID_doesNotExist_throws(){
+    void getRateLimitByID_doesNotExist_throws() {
         assertTrue(repository.getRateLimit("ID").isEmpty());
     }
 
     @Test
-    void getRateLimitBySignature_doesNotExist_throws(){
-        ApiSignature apiSignature = ApiSignature.builder()
-                .service(SERVICE)
-                .uri(URI)
-                .method(ApiSignature.MethodEnum.GET)
-                .build();
+    void getRateLimitBySignature_doesNotExist_throws() {
+        ApiSignature apiSignature =
+                ApiSignature.builder()
+                        .service(SERVICE)
+                        .uri(URI)
+                        .method(ApiSignature.MethodEnum.GET)
+                        .build();
         assertTrue(repository.getRateLimit(apiSignature).isEmpty());
     }
 }

@@ -3,14 +3,13 @@ package com.example.ratelimiter.controller;
 import com.example.ratelimiter.api.RatelimiterApi;
 import com.example.ratelimiter.api.model.*;
 import com.example.ratelimiter.dal.RateLimitRule;
-import com.example.ratelimiter.service.RateLimitValidator;
 import com.example.ratelimiter.service.RateLimitRuleService;
+import com.example.ratelimiter.service.RateLimitValidator;
 import com.example.ratelimiter.utils.DurationConvertor;
 import com.example.ratelimiter.utils.MethodEnumConvertor;
+import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @RestController
 public class RateLimiterController implements RatelimiterApi {
@@ -30,12 +29,13 @@ public class RateLimiterController implements RatelimiterApi {
                         request.getApiSignature(),
                         DurationConvertor.convert(request.getDuration()),
                         request.getLimit());
-        return ResponseEntity.status(201).body(CreateRateLimitRuleResponse.builder().id(id).build());
+        return ResponseEntity.status(201)
+                .body(CreateRateLimitRuleResponse.builder().id(id).build());
     }
 
     public ResponseEntity<GetRateLimitRuleResponse> getRateLimitRuleById(String id) {
         Optional<RateLimitRule> rateLimit = rateLimitRuleService.getRateLimitRule(id);
-        if(rateLimit.isEmpty()) return ResponseEntity.notFound().build();
+        if (rateLimit.isEmpty()) return ResponseEntity.notFound().build();
         return getRateLimitResponseEntity(rateLimit.get());
     }
 
@@ -61,7 +61,7 @@ public class RateLimiterController implements RatelimiterApi {
                         .method(MethodEnumConvertor.convert(method))
                         .build();
         Optional<RateLimitRule> rateLimit = rateLimitRuleService.getRateLimitRule(apiSignature);
-        if(rateLimit.isEmpty()) return ResponseEntity.notFound().build();
+        if (rateLimit.isEmpty()) return ResponseEntity.notFound().build();
         return getRateLimitResponseEntity(rateLimit.get());
     }
 

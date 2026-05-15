@@ -1,7 +1,7 @@
 package com.example.ratelimiter.dal;
 
-import com.example.ratelimiter.exceptions.RateLimitException;
 import com.example.ratelimiter.api.model.ApiSignature;
+import com.example.ratelimiter.exceptions.RateLimitException;
 import com.example.ratelimiter.model.CreateRateLimitDetails;
 import com.example.ratelimiter.model.UpdateRateLimitDetails;
 import java.util.Map;
@@ -15,7 +15,8 @@ public class InMemoryRateLimitRuleRepository implements RateLimitRuleRepository 
 
     @Override
     public RateLimitRule createRateLimit(CreateRateLimitDetails createRateLimitDetails) {
-        if(getRateLimit(createRateLimitDetails.getApiSignature()).isPresent()) throw new RateLimitException("Rate Limit already exists");
+        if (getRateLimit(createRateLimitDetails.getApiSignature()).isPresent())
+            throw new RateLimitException("Rate Limit already exists");
         RateLimitRule rateLimitRule = new RateLimitRule();
         rateLimitRule.setId(UUID.randomUUID().toString());
         rateLimitRule.setApiSignature(createRateLimitDetails.getApiSignature());
@@ -27,7 +28,7 @@ public class InMemoryRateLimitRuleRepository implements RateLimitRuleRepository 
 
     @Override
     public Optional<RateLimitRule> getRateLimit(String id) {
-        if(rateLimitRules.containsKey(id)) return Optional.of(rateLimitRules.get(id));
+        if (rateLimitRules.containsKey(id)) return Optional.of(rateLimitRules.get(id));
         return Optional.empty();
     }
 
@@ -41,13 +42,13 @@ public class InMemoryRateLimitRuleRepository implements RateLimitRuleRepository 
     @Override
     public RateLimitRule updateRateLimit(UpdateRateLimitDetails updateRateLimitDetails) {
         Optional<RateLimitRule> rateLimitRule = Optional.empty();
-        if(updateRateLimitDetails.getId()!=null){
+        if (updateRateLimitDetails.getId() != null) {
             rateLimitRule = getRateLimit(updateRateLimitDetails.getId());
         }
-        if(updateRateLimitDetails.getId()==null){
+        if (updateRateLimitDetails.getId() == null) {
             rateLimitRule = getRateLimit(updateRateLimitDetails.getApiSignature());
         }
-        if(rateLimitRule.isEmpty()) throw new RateLimitException("Rate limit does not exist");
+        if (rateLimitRule.isEmpty()) throw new RateLimitException("Rate limit does not exist");
 
         rateLimitRule.get().setDuration(updateRateLimitDetails.getDuration());
         rateLimitRule.get().setLimit(updateRateLimitDetails.getLimit());
@@ -56,7 +57,7 @@ public class InMemoryRateLimitRuleRepository implements RateLimitRuleRepository 
 
     @Override
     public void deleteRateLimit(String id) {
-        if(getRateLimit(id).isEmpty()) return;
+        if (getRateLimit(id).isEmpty()) return;
         rateLimitRules.remove(id);
     }
 }

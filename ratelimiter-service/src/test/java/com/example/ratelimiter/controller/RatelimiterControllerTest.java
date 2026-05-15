@@ -13,9 +13,8 @@ import com.example.ratelimiter.api.model.GetRateLimitRuleResponse;
 import com.example.ratelimiter.api.model.RateLimitRuleDuration;
 import com.example.ratelimiter.dal.RateLimitRule;
 import com.example.ratelimiter.service.RateLimitRuleService;
-import org.junit.jupiter.api.*;
-
 import java.util.Optional;
+import org.junit.jupiter.api.*;
 
 class RatelimiterControllerTest {
 
@@ -69,7 +68,8 @@ class RatelimiterControllerTest {
                         .build());
         rateLimitRule.setDuration(java.time.Duration.ofSeconds(60L));
         rateLimitRule.setLimit(10);
-        when(rateLimitRuleService.getRateLimitRule(rateLimiterId)).thenReturn(Optional.of(rateLimitRule));
+        when(rateLimitRuleService.getRateLimitRule(rateLimiterId))
+                .thenReturn(Optional.of(rateLimitRule));
 
         GetRateLimitRuleResponse response =
                 rateLimiterController.getRateLimitRuleById(rateLimiterId).getBody();
@@ -102,7 +102,8 @@ class RatelimiterControllerTest {
         rateLimitRule.setApiSignature(apiSignature);
         rateLimitRule.setDuration(java.time.Duration.ofSeconds(60L));
         rateLimitRule.setLimit(10);
-        when(rateLimitRuleService.getRateLimitRule(apiSignature)).thenReturn(Optional.of(rateLimitRule));
+        when(rateLimitRuleService.getRateLimitRule(apiSignature))
+                .thenReturn(Optional.of(rateLimitRule));
 
         GetRateLimitRuleResponse response =
                 rateLimiterController.getRateLimitRule(service, uri, method).getBody();
